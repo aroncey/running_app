@@ -1,12 +1,14 @@
 const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
-const store = []
-const valueArray = []
-const indexPositions = []
-const bestDays = []
-const sortedValueArray = []
-const bestDaysDescriptions = []
+var store = []
+var valueArray = []
+var indexPositions = []
+var bestDays = []
+var sortedValueArray = []
+var bestDaysDescriptions = []
 
 function getLocationKey() {
+  clearAllArrays()
+  $("#results").empty()
   let baseUrl = "http://dataservice.accuweather.com/locations/v1/search?apikey="
   let baseUrlWithApi = baseUrl + API_KEY + "&q="
   let searchUrl = baseUrlWithApi + $('#searchTerms').val()
@@ -33,7 +35,6 @@ function getIndices(key) {
   }
 
 function createForecast(data){
-  console.log("createForecast")
   data.map(forecastBuilder)
   getValues(store)
 }
@@ -43,7 +44,6 @@ function forecastBuilder(obj){
 }
 
 function getValues(data) {
-  console.log("getValues")
   data.forEach(function(element){
     valueArray.push(element.value)
   })
@@ -75,16 +75,22 @@ function numberToDay(integer) {
   formattedDate(new Date(myDate.setDate(myDate.getDate() + integer)))
 }
 
+
 function formattedDate(date){
-var weekday = new Array();
-  weekday[0] = "Sunday";
-  weekday[1] = "Monday";
-  weekday[2] = "Tuesday";
-  weekday[3] = "Wednesday";
-  weekday[4] = "Thursday";
-  weekday[5] = "Friday";
-  weekday[6] = "Saturday";
-  bestDays.push(weekday[date.getUTCDay()])
+if (date.getUTCDay() === (new Date ()).getUTCDay()) {
+  bestDays.push("Today")
+} else {
+  var weekday = new Array();
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+    weekday[7] = "Today"
+    bestDays.push(weekday[date.getUTCDay()])
+    }
 }
 
 function describeDays(sortedValueArray) {
@@ -96,22 +102,22 @@ function generateDescription(element){
   let x = bestDays[sortedValueArray.indexOf(element)]
 switch (true) {
     case (element <= 1):
-          bestDaysDescriptions.push(`Please do not run on ${x}`)
+          bestDaysDescriptions.push(`Please do not run ${x}`)
           break;
     case (element > 1 && element < 2):
-          bestDaysDescriptions.push(`You would be crazy to run on ${x}`)
+          bestDaysDescriptions.push(`You would be crazy to run ${x}`)
           break;
     case (element >= 2 && element < 3):
-          bestDaysDescriptions.push(`Really? It's not worth the effort to go out on ${x}`)
+          bestDaysDescriptions.push(`Really? It's not worth the effort to go out ${x}`)
           break;
     case (element >= 3 && element < 4):
           bestDaysDescriptions.push(`Eh, ${x} will have sub par conditions`)
           break;
     case (element >= 4 && element < 5):
-          bestDaysDescriptions.push(`We wouldn't think you're crazy to run on ${x}, but we don't know how much fun you'll have!`)
+          bestDaysDescriptions.push(`We wouldn't think you're crazy to run ${x}, but we don't know how much fun you'll have!`)
           break;
     case (element >= 5 && element < 6):
-          bestDaysDescriptions.push(`You won't regret running on ${x}, we guarantee it`)
+          bestDaysDescriptions.push(`You won't regret running ${x}, we guarantee it`)
           break;
     case (element >= 6 && element < 7):
           bestDaysDescriptions.push(`${x} will be a lovely day!`)
@@ -120,10 +126,10 @@ switch (true) {
           bestDaysDescriptions.push(`${x} will be an amazing day!`)
           break;
     case (element >= 8 && element < 9):
-          bestDaysDescriptions.push(`${x} be a delight !`)
+          bestDaysDescriptions.push(`${x} is going to be a delight !`)
           break;
     case (element >= 9 && element < 10):
-          bestDaysDescriptions.push(`${x} will be one fo the best days ever to run`)
+          bestDaysDescriptions.push(`${x} will be one of the best days ever to run`)
           break;
     case (element == 10):
           bestDaysDescriptions.push(`${x} will be out of this world !!!!`)
@@ -140,14 +146,26 @@ function showDays(bestDays){
   })
 }
 
-function getMaxValue(value){
-  var maxValue = Math.max.apply(null, valueArray)
-  getIndexOfMax(maxValue)
+function clearAllArrays() {
+  store.length = 0
+  valueArray.length = 0
+  indexPositions.length = 0
+  bestDays.length = 0
+  sortedValueArray.length = 0
+  bestDaysDescriptions.length = 0
 }
-function getIndexOfMax(value){
-  let indexOfMax = valueArray.indexOf(value)
-  showIndexValue(indexOfMax)
-}
+
+
+
+
+// function getMaxValue(value){
+//   var maxValue = Math.max.apply(null, valueArray)
+//   getIndexOfMax(maxValue)
+// }
+// function getIndexOfMax(value){
+//   let indexOfMax = valueArray.indexOf(value)
+//   showIndexValue(indexOfMax)
+// }
 
 
 class Forecast {

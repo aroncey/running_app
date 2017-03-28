@@ -4,4 +4,6 @@ To do:
 * Front End Design
 *clear arrays on next search
 
+*Index of
+
 * eventually make new api call to get weather data for each  day
