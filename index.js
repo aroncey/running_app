@@ -1,10 +1,9 @@
 const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
-var store = []
-var valueArray = []
-var indexPositions = []
-var bestDays = []
-var sortedValueArray = []
-var bestDaysDescriptions = []
+var store = [] // contains original objects created from promise
+var valueArray = [] // contains values from original objects
+var counter = 0
+
+//Fetches the Location Key for Entered Location
 
 function getLocationKey() {
   clearAllArrays()
@@ -24,6 +23,8 @@ function getLocationKey() {
   })
 }
 
+//From Location Key, Grab the Index Values -- Call Instantiation
+
 function getIndices(key) {
   let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
   let categoryId = "1"
@@ -34,51 +35,73 @@ function getIndices(key) {
     })
   }
 
+//Create objects from the promise-data
+
 function createForecast(data){
   data.map(forecastBuilder)
   getValues(store)
 }
 
+//Forceast constructor
+
 function forecastBuilder(obj){
     new Forecast(obj.ID, obj.CategoryValue, obj.Value, obj.EpochDateTime)
 }
+
+//Push the values into valueArray
 
 function getValues(data) {
   data.forEach(function(element){
     valueArray.push(element.value)
   })
-  sortValueArray(valueArray)
+  createObjectList(valueArray)
 }
 
-function sortValueArray(valueArray){
-  valueArray.forEach(function(element){
-    sortedValueArray.push(element)
-  })
-  sortedValueArray.sort().reverse()
-  getIndicesOfSortedArray(sortedValueArray)
+//Map value array calling createObjectsForList
+
+function createObjectList(valueArray) {
+ let objectList = valueArray.map(createObjectsForList)
+ sortObjectList(objectList)
 }
 
-function getIndicesOfSortedArray(sortedValueArray) {
-  sortedValueArray.forEach(function(element) {
-    indexPositions.push(valueArray.indexOf(element))
-  })
-  getDatesFromIndices(indexPositions)
+//Create objects containing value and index position of value
+
+function createObjectsForList(element, index) {
+  return {
+    value: element,
+    position: index
+    }
 }
 
-function getDatesFromIndices(indexPositions) {
-  indexPositions.map(numberToDay)
-  describeDays(sortedValueArray)
+//Sort list of objects based on value property
+
+function sortObjectList(objectList) {
+  objectList.sort(function(a, b) {
+    return parseFloat(b.value) - parseFloat(a.value);
+  });
+  getDatesFromIndices(objectList)
 }
 
-function numberToDay(integer) {
+//Map over objectList add the property which holds day
+
+function getDatesFromIndices(objectList) {
+  objectList.map(numberToDay)
+  describeDays(objectList)
+}
+
+//Convert the index value to a day
+
+function numberToDay(object) {
   myDate = new Date ()
-  formattedDate(new Date(myDate.setDate(myDate.getDate() + integer)))
+  object.date = (new Date(myDate.setDate(myDate.getDate() + object.position)))
+  formattedDate(object)
 }
 
+//Format the date into string of day of week
 
-function formattedDate(date){
-if (date.getUTCDay() === (new Date ()).getUTCDay()) {
-  bestDays.push("Today")
+function formattedDate(object){
+if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
+  object.dayName = "Today"
 } else {
   var weekday = new Array();
     weekday[0] = "Sunday";
@@ -89,50 +112,53 @@ if (date.getUTCDay() === (new Date ()).getUTCDay()) {
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
     weekday[7] = "Today"
-    bestDays.push(weekday[date.getUTCDay()])
+    object.dayName = weekday[object.date.getUTCDay()]
     }
 }
 
-function describeDays(sortedValueArray) {
-  sortedValueArray.forEach(generateDescription)
-  showDays(bestDaysDescriptions)
+//Map over object list to generateDescription
+
+function describeDays(objectList) {
+  objectList.forEach(generateDescription)
+  showDays(objectList)
 }
 
-function generateDescription(element){
-  let x = bestDays[sortedValueArray.indexOf(element)]
+//From day of week, generate a phrase for display
+
+function generateDescription(object){
 switch (true) {
-    case (element <= 1):
-          bestDaysDescriptions.push(`Please do not run ${x}`)
+    case (object.value <= 1):
+          object.phrase = `Please do not run ${object.dayName}`
           break;
-    case (element > 1 && element < 2):
-          bestDaysDescriptions.push(`You would be crazy to run ${x}`)
+    case (object.value > 1 && object.value < 2):
+          object.phrase = `You would be crazy to run ${object.dayName}`
           break;
-    case (element >= 2 && element < 3):
-          bestDaysDescriptions.push(`Really? It's not worth the effort to go out ${x}`)
+    case (object.value >= 2 && object.value < 3):
+          object.phrase = `Really? It's not worth the effort to go out ${object.dayName}`
           break;
-    case (element >= 3 && element < 4):
-          bestDaysDescriptions.push(`Eh, ${x} will have sub par conditions`)
+    case (object.value >= 3 && object.value < 4):
+          object.phrase = `Eh, ${object.dayName} will have sub par conditions`
           break;
-    case (element >= 4 && element < 5):
-          bestDaysDescriptions.push(`We wouldn't think you're crazy to run ${x}, but we don't know how much fun you'll have!`)
+    case (object.value >= 4 && object.value < 5):
+          object.phrase = `We wouldn't think you're crazy to run ${object.dayName}, but we don't know how much fun you'll have!`
           break;
-    case (element >= 5 && element < 6):
-          bestDaysDescriptions.push(`You won't regret running ${x}, we guarantee it`)
+    case (object.value >= 5 && object.value < 6):
+          object.phrase = `You won't regret running ${object.dayName}, we guarantee it`
           break;
-    case (element >= 6 && element < 7):
-          bestDaysDescriptions.push(`${x} will be a lovely day!`)
+    case (object.value >= 6 && object.value < 7):
+          object.phrase = `${object.dayName} will be a lovely day!`
           break;
-    case (element >= 7 && element < 8):
-          bestDaysDescriptions.push(`${x} will be an amazing day!`)
+    case (object.value >= 7 && object.value < 8):
+          object.phrase = `${object.dayName} will be an amazing day!`
           break;
-    case (element >= 8 && element < 9):
-          bestDaysDescriptions.push(`${x} is going to be a delight !`)
+    case (object.value >= 8 && object.value < 9):
+          object.phrase = `${object.dayName} is going to be a delight !`
           break;
-    case (element >= 9 && element < 10):
-          bestDaysDescriptions.push(`${x} will be one of the best days ever to run`)
+    case (object.value >= 9 && object.value < 10):
+          object.phrase = `${object.dayName} will be one of the best days ever to run`
           break;
-    case (element == 10):
-          bestDaysDescriptions.push(`${x} will be out of this world !!!!`)
+    case (object.value == 10):
+          object.phrase = `${object.dayName} will be out of this world !!!!`
           break;
     default:
         alert("meeeeeh");
@@ -140,11 +166,15 @@ switch (true) {
       }
 }
 
-function showDays(bestDays){
-  bestDays.forEach(function(value){
-    $("#results").append(`<li>${value}</li>`)
+//Display on page
+
+function showDays(objectList){
+  debugger
+  objectList.forEach(function(object){
+    $("#results").append(`<li>${object.phrase}</li>`)
   })
 }
+
 
 function clearAllArrays() {
   store.length = 0
@@ -154,18 +184,6 @@ function clearAllArrays() {
   sortedValueArray.length = 0
   bestDaysDescriptions.length = 0
 }
-
-
-
-
-// function getMaxValue(value){
-//   var maxValue = Math.max.apply(null, valueArray)
-//   getIndexOfMax(maxValue)
-// }
-// function getIndexOfMax(value){
-//   let indexOfMax = valueArray.indexOf(value)
-//   showIndexValue(indexOfMax)
-// }
 
 
 class Forecast {
