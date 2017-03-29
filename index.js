@@ -1,102 +1,50 @@
 const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
+const FLICKR_API = "ea01f140f196b83ec68734970e235e36"
+const FLICKR_SECRET = " 40e4e1d0614430fb"
 var store = [] // contains original objects created from promise
-var valueArray = [] // contains values from original objects
 var counter = 0
+var longitude
+var latitude
+var searchAddress
 
-
-//Fetches the Location Key for Entered Location
-
-function getLocationKey() {
-  $('#searchButton').hide()
-  $('#searchTerms').hide()
-  $('#homeButton').show()
-  let baseUrl = "http://dataservice.accuweather.com/locations/v1/search?apikey="
-  let baseUrlWithApi = baseUrl + API_KEY + "&q="
-  let searchUrl = baseUrlWithApi + $('#searchTerms').val()
-  $.get(searchUrl, function(data) {
-    return data
-  }).then(function(data){
-    debugger;
-    key = data[0].Key
-    return key
-  }).then(function(key){
-    getIndices(key)
-  }).fail((error) => {
-    console.log("There was an error with this request.")
-  })
-}
-
-//From Location Key, Grab the Index Values -- Call Instantiation
-
-function getIndices(key) {
-  let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
-  let categoryId = "1"
-  let baseUrlWithKey = url + key + "/"
-  let searchUrl = baseUrlWithKey + categoryId + "?apikey=" + API_KEY
-  $.get(searchUrl).then(createForecast).fail((error) => {
-      console.log("There was an error with second call")
-    })
-  }
 
 //Create objects from the promise-data
 
 function createForecast(data){
   data.map(forecastBuilder)
-  getValues(store)
+  sortStore(store)
 }
 
 //Forceast constructor
 
 function forecastBuilder(obj){
-    new Forecast(obj.ID, obj.CategoryValue, obj.Value, obj.EpochDateTime)
-}
-
-//Push the values into valueArray
-
-function getValues(data) {
-  data.forEach(function(element){
-    valueArray.push(element.value)
-  })
-  createObjectList(valueArray)
-}
-
-//Map value array calling createObjectsForList
-
-function createObjectList(valueArray) {
- let objectList = valueArray.map(createObjectsForList)
- sortObjectList(objectList)
-}
-
-//Create objects containing value and index position of value
-
-function createObjectsForList(element, index) {
-  return {
-    value: element,
-    position: index
-    }
+    let rawDate = obj.EpochDateTime
+    let date = new Date(0)
+    date.setUTCSeconds(rawDate)
+    new Forecast(obj.ID, obj.CategoryValue, obj.Value, date, longitude, latitude)
 }
 
 //Sort list of objects based on value property
 
-function sortObjectList(objectList) {
-  objectList.sort(function(a, b) {
+function sortStore(store) {
+  store.sort(function(a, b) {
     return parseFloat(b.value) - parseFloat(a.value);
   });
-  getDatesFromIndices(objectList)
+  getDatesFromIndices(store)
 }
 
-//Map over objectList add the property which holds day
+//Map over Store add the property which holds day
 
-function getDatesFromIndices(objectList) {
-  objectList.map(numberToDay)
-  describeDays(objectList)
+function getDatesFromIndices(store) {
+  store.map(numberToDay)
+  describeDays(store)
 }
 
 //Convert the index value to a day
 
 function numberToDay(object) {
   myDate = new Date ()
-  object.date = (new Date(myDate.setDate(myDate.getDate() + object.position)))
+  object.date = (new Date(myDate.setDate(myDate.getDate() + store.indexOf(object))))
   formattedDate(object)
 }
 
@@ -121,9 +69,9 @@ if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
 
 //Map over object list to generateDescription
 
-function describeDays(objectList) {
-  objectList.forEach(generateDescription)
-  showDays(objectList)
+function describeDays(store) {
+  store.forEach(generateDescription)
+  showDays(store)
 }
 
 //From day of week, generate a phrase for display
@@ -171,11 +119,12 @@ switch (true) {
 
 //Display on page
 
-function showDays(objectList){
-  objectList.forEach(function(object){
-    $("#results").append(`<li>${object.phrase}</li>`)
-  })
+function showDays(store){
+  dataItem = store[counter]
+  $("#displayText").html(dataItem.phrase)
   $("homeButton").show()
+  $('#nextButton').show()
+  $('#previousButton').show()
 }
 
 function resetHome() {
@@ -184,6 +133,8 @@ function resetHome() {
   $('#searchTerms').show()
   $('#searchButton').show()
   $('#homeButton').hide()
+  $("#nextButton").hide()
+  $("#previousButton").hide()
 }
 
 function clearAllArrays() {
@@ -191,13 +142,25 @@ function clearAllArrays() {
   valueArray.length = 0
 }
 
+function incrementCounter() {
+  counter++
+  showDays(store)
+}
+
+function decrementCounter() {
+  counter--
+  showDays(store)
+}
+
 
 class Forecast {
-  constructor(activityId, categoryId, value, date){
+  constructor(activityId, categoryId, value, date, longitude, latitude){
     this.activityId = activityId
     this.categoryId = categoryId
     this.value = value
     this.date = date
+    this.longitude = longitude
+    this.latitude = latitude
     store.push(this)
   }
 }
