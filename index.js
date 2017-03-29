@@ -3,17 +3,20 @@ var store = [] // contains original objects created from promise
 var valueArray = [] // contains values from original objects
 var counter = 0
 
+
 //Fetches the Location Key for Entered Location
 
 function getLocationKey() {
-  clearAllArrays()
-  $("#results").empty()
+  $('#searchButton').hide()
+  $('#searchTerms').hide()
+  $('#homeButton').show()
   let baseUrl = "http://dataservice.accuweather.com/locations/v1/search?apikey="
   let baseUrlWithApi = baseUrl + API_KEY + "&q="
   let searchUrl = baseUrlWithApi + $('#searchTerms').val()
   $.get(searchUrl, function(data) {
     return data
   }).then(function(data){
+    debugger;
     key = data[0].Key
     return key
   }).then(function(key){
@@ -172,8 +175,16 @@ function showDays(objectList){
   objectList.forEach(function(object){
     $("#results").append(`<li>${object.phrase}</li>`)
   })
+  $("homeButton").show()
 }
 
+function resetHome() {
+  clearAllArrays()
+  $("#results").empty()
+  $('#searchTerms').show()
+  $('#searchButton').show()
+  $('#homeButton').hide()
+}
 
 function clearAllArrays() {
   store.length = 0

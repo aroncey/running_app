@@ -2,11 +2,13 @@
 <html>
   <head>
     <title>Running app</title>
+    <link rel="stylesheet" type="text/css" href='stylesheet.css' />
   </head>
   <body>
     <main id="main">
       <input type='text' id="searchTerms" />
-      <button onclick="getLocationKey()">Find Out</button>
+      <button id="searchButton" onclick="getLocationKey()">Find Out</button>
+      <button id="homeButton" onclick="resetHome()" class="initiallyHidden">Reset</button>
       <div id="errors"></div>
     </main>
     <div class="flexbox-container">
