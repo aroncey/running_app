@@ -169,7 +169,6 @@ switch (true) {
 //Display on page
 
 function showDays(objectList){
-  debugger
   objectList.forEach(function(object){
     $("#results").append(`<li>${object.phrase}</li>`)
   })
@@ -179,10 +178,6 @@ function showDays(objectList){
 function clearAllArrays() {
   store.length = 0
   valueArray.length = 0
-  indexPositions.length = 0
-  bestDays.length = 0
-  sortedValueArray.length = 0
-  bestDaysDescriptions.length = 0
 }
 
 
