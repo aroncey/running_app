@@ -82,7 +82,7 @@ function numberToDay(object) {
 
 function formattedDate(object){
 if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
-  object.dayName = "Today"
+  object.dayName = "today"
 } else {
   var weekday = new Array();
     weekday[0] = "Sunday";
@@ -118,28 +118,28 @@ switch (true) {
           object.phrase = `Really? It's not worth the effort to go out ${object.dayName}`
           break;
     case (object.value >= 3 && object.value < 4):
-          object.phrase = `Eh, ${object.dayName} will have sub par conditions`
+          object.phrase = `Eh, don't plan on it ${object.dayName}`
           break;
     case (object.value >= 4 && object.value < 5):
-          object.phrase = `We wouldn't think you're crazy to run ${object.dayName}, but we don't know how much fun you'll have!`
+          object.phrase = `We wouldn't think you're crazy to run ${object.dayName}, but we don't know how much fun you'll have`
           break;
     case (object.value >= 5 && object.value < 6):
-          object.phrase = `You won't regret running ${object.dayName}, we guarantee it`
+          object.phrase = `You may regret running ${object.dayName}`
           break;
     case (object.value >= 6 && object.value < 7):
-          object.phrase = `${object.dayName} will be a lovely day!`
+          object.phrase = `$It will be a mediocre day to run ${object.dayName}!`
           break;
     case (object.value >= 7 && object.value < 8):
-          object.phrase = `${object.dayName} will be an amazing day!`
+          object.phrase = `It will be a nice day to run ${object.dayName}!`
           break;
     case (object.value >= 8 && object.value < 9):
-          object.phrase = `${object.dayName} is going to be a delight !`
+          object.phrase = `It will be a lovely day to run ${object.dayName}!`
           break;
     case (object.value >= 9 && object.value < 10):
-          object.phrase = `${object.dayName} will be one of the best days ever to run`
+          object.phrase = `It will be a delightful day to run ${object.dayName}`
           break;
     case (object.value == 10):
-          object.phrase = `${object.dayName} will be out of this world !!!!`
+          object.phrase = `The weather will be out of this world ${object.dayName}!!!!`
           break;
     default:
         alert("meeeeeh");
@@ -169,7 +169,6 @@ function resetHome() {
 
 function clearAllArrays() {
   store.length = 0
-  valueArray.length = 0
 }
 
 function incrementCounter() {
