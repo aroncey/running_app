@@ -1,0 +1,43 @@
+.initiallyHidden { display: none; }
+
+.leftbtn  {
+  background: none;
+  border: none;
+  font-size: 6em;
+  top: 40%;
+  position: fixed;
+  left: 25px;
+}
+
+.rightbtn {
+  background: none;
+  border: none;
+  font-size: 6em;
+  position: fixed;
+  top: 40%;
+  right: 25px;
+}
+
+.searchBar {
+  position: fixed;
+  top: 40%;
+  width: 400px;
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+}
+
+.search {
+  margin-left: 40%;
+}
+
+.searchButton {
+  position: fixed;
+  top: 45%;
+  width: 300px;
+  height: 30px;
+  border-radius: 4px;
+  border: none;
+  font-size: 1em;
+  text-align: center;
+}

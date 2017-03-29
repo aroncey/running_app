@@ -1,0 +1,25 @@
+{
+  "name": "running_app",
+  "version": "1.0.0",
+  "description": "best damn running app",
+  "main": "index.js",
+  "dependencies": {
+    "boostrap": "^1.0.0",
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aroncey/running_app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aroncey/running_app/issues"
+  },
+  "homepage": "https://github.com/aroncey/running_app#readme"
+}
