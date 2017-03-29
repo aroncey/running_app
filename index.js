@@ -7,7 +7,37 @@ var longitude
 var latitude
 var searchAddress
 
+function getLocationKey() {
+  $('#searchButton').hide()
+  $('#searchTerms').hide()
+  $('#homeButton').show()
+  let baseUrl = "http://dataservice.accuweather.com/locations/v1/search?apikey="
+  let baseUrlWithApi = baseUrl + API_KEY + "&q="
+  let searchUrl = baseUrlWithApi + $('#searchTerms').val()
+  $.get(searchUrl, function(data) {
+    return data
+  }).then(function(data){
+    key = data[0].Key
+    searchAddress = data[0].LocalizedName + " " + data[0].Country.LocalizedName
+    longitude = data[0].GeoPosition.Longitude
+    latitude = data[0].GeoPosition.Latitude
+    return key
+  }).then(function(key){
+    getIndices(key)
+  }).catch((error) => {
+    console.log("There was an error with this request.")
+  })
+}
 
+function getIndices(key) {
+  let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
+  let categoryId = "1"
+  let baseUrlWithKey = url + key + "/"
+  let searchUrl = baseUrlWithKey + categoryId + "?apikey=" + API_KEY
+  $.get(searchUrl).then(createForecast).catch((error) => {
+      console.log("There was an error with second call")
+    })
+  }
 //Create objects from the promise-data
 
 function createForecast(data){
