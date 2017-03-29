@@ -1,10 +1,15 @@
 const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
+const FLICKR_API = "ea01f140f196b83ec68734970e235e36"
+const FLICKR_SECRET = "40e4e1d0614430fb"
 var store = [] // contains original objects created from promise
-var valueArray = [] // contains values from original objects
 var counter = 0
 const API_KEY2 = "6PeGFNKh7rV0HYYgZLg11SJidiuPfLz5"
 var key;
 var forecastsArray = []
+var longitude
+var latitude
+var searchAddress
+
 //Fetches the Location Key for Entered Location
 
 function getLocationKey() {
@@ -24,8 +29,7 @@ function getLocationKey() {
     return key
   }).then(function(key){
     getIndices(key)
-    getForecastSearchTerm(key)
-  }).fail((error) => {
+  }).catch((error) => {
     console.log("There was an error with this request.")
   })
 }
@@ -41,82 +45,60 @@ function getForecastSearchTerm(key) {
    data.DailyForecasts.forEach(function(object){
     forecastsArray.push(object.Day.IconPhrase)
   })
-  }).fail((error) => {
+  }).catch((error) => {
     console.log("There was an error with this request.")
   })
 }
 
+
 //From Location Key, Grab the Index Values -- Call Instantiation
 
-function getIndices(data) {
+function getIndices(key) {
   let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
   let categoryId = "1"
   let baseUrlWithKey = url + key + "/"
   let searchUrl = baseUrlWithKey + categoryId + "?apikey=" + API_KEY
-  $.get(searchUrl).then(createForecast).fail((error) => {
+  $.get(searchUrl).then(createForecast).catch((error) => {
       console.log("There was an error with second call")
     })
   }
-
 //Create objects from the promise-data
 
 function createForecast(data){
   data.map(forecastBuilder)
-  getValues(store)
+  sortStore(store)
 }
 
 //Forceast constructor
 
 function forecastBuilder(obj){
-    new Forecast(obj.ID, obj.CategoryValue, obj.Value, obj.EpochDateTime)
-}
-
-//Push the values into valueArray
-
-function getValues(data) {
-  data.forEach(function(element){
-    valueArray.push(element.value)
-  })
-  createObjectList(valueArray)
-}
-
-//Map value array calling createObjectsForList
-
-function createObjectList(valueArray) {
- let objectList = valueArray.map(createObjectsForList)
- sortObjectList(objectList)
-}
-
-//Create objects containing value and index position of value
-
-function createObjectsForList(element, index) {
-  return {
-    value: element,
-    position: index
-    }
+    let rawDate = obj.EpochDateTime
+    let date = new Date(0)
+    date.setUTCSeconds(rawDate)
+    new Forecast(obj.ID, obj.CategoryValue, obj.Value, date, longitude, latitude)
 }
 
 //Sort list of objects based on value property
 
-function sortObjectList(objectList) {
-  objectList.sort(function(a, b) {
+function sortStore(store) {
+  store.sort(function(a, b) {
     return parseFloat(b.value) - parseFloat(a.value);
   });
-  getDatesFromIndices(objectList)
+  getDatesFromIndices(store)
 }
 
-//Map over objectList add the property which holds day
+//Map over Store add the property which holds day
 
-function getDatesFromIndices(objectList) {
-  objectList.map(numberToDay)
-  describeDays(objectList)
+function getDatesFromIndices(store) {
+  store.map(numberToDay)
+  describeDays(store)
 }
 
 //Convert the index value to a day
 
 function numberToDay(object) {
   myDate = new Date ()
-  object.date = (new Date(myDate.setDate(myDate.getDate() + object.position)))
+  object.date = (new Date(myDate.setDate(myDate.getDate() + store.indexOf(object))))
   formattedDate(object)
 }
 
@@ -124,7 +106,7 @@ function numberToDay(object) {
 
 function formattedDate(object){
 if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
-  object.dayName = "Today"
+  object.dayName = "today"
 } else {
   var weekday = new Array();
     weekday[0] = "Sunday";
@@ -141,9 +123,9 @@ if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
 
 //Map over object list to generateDescription
 
-function describeDays(objectList) {
-  objectList.forEach(generateDescription)
-  showDays(objectList)
+function describeDays(store) {
+  store.forEach(generateDescription)
+  showDays(store)
 }
 
 //From day of week, generate a phrase for display
@@ -160,28 +142,28 @@ switch (true) {
           object.phrase = `Really? It's not worth the effort to go out ${object.dayName}`
           break;
     case (object.value >= 3 && object.value < 4):
-          object.phrase = `Eh, ${object.dayName} will have sub par conditions`
+          object.phrase = `Eh, don't plan on it ${object.dayName}`
           break;
     case (object.value >= 4 && object.value < 5):
-          object.phrase = `We wouldn't think you're crazy to run ${object.dayName}, but we don't know how much fun you'll have!`
+          object.phrase = `We wouldn't think you're crazy to run ${object.dayName}, but we don't know how much fun you'll have`
           break;
     case (object.value >= 5 && object.value < 6):
-          object.phrase = `You won't regret running ${object.dayName}, we guarantee it`
+          object.phrase = `You may regret running ${object.dayName}`
           break;
     case (object.value >= 6 && object.value < 7):
-          object.phrase = `${object.dayName} will be a lovely day!`
+          object.phrase = `$It will be a mediocre day to run ${object.dayName}!`
           break;
     case (object.value >= 7 && object.value < 8):
-          object.phrase = `${object.dayName} will be an amazing day!`
+          object.phrase = `It will be a nice day to run ${object.dayName}!`
           break;
     case (object.value >= 8 && object.value < 9):
-          object.phrase = `${object.dayName} is going to be a delight !`
+          object.phrase = `It will be a lovely day to run ${object.dayName}!`
           break;
     case (object.value >= 9 && object.value < 10):
-          object.phrase = `${object.dayName} will be one of the best days ever to run`
+          object.phrase = `It will be a delightful day to run ${object.dayName}`
           break;
     case (object.value == 10):
-          object.phrase = `${object.dayName} will be out of this world !!!!`
+          object.phrase = `The weather will be out of this world ${object.dayName}!!!!`
           break;
     default:
         alert("meeeeeh");
@@ -191,11 +173,12 @@ switch (true) {
 
 //Display on page
 
-function showDays(objectList){
-  objectList.forEach(function(object){
-    $("#results").append(`<li>${object.phrase}</li>`)
-  })
+function showDays(store){
+  dataItem = store[counter]
+  $("#displayText").html(dataItem.phrase)
   $("homeButton").show()
+  $('#nextButton').show()
+  $('#previousButton').show()
 }
 
 function resetHome() {
@@ -204,20 +187,33 @@ function resetHome() {
   $('#searchTerms').show()
   $('#searchButton').show()
   $('#homeButton').hide()
+  $("#nextButton").hide()
+  $("#previousButton").hide()
 }
 
 function clearAllArrays() {
   store.length = 0
-  valueArray.length = 0
+}
+
+function incrementCounter() {
+  counter++
+  showDays(store)
+}
+
+function decrementCounter() {
+  counter--
+  showDays(store)
 }
 
 
 class Forecast {
-  constructor(activityId, categoryId, value, date){
+  constructor(activityId, categoryId, value, date, longitude, latitude){
     this.activityId = activityId
     this.categoryId = categoryId
     this.value = value
     this.date = date
+    this.longitude = longitude
+    this.latitude = latitude
     store.push(this)
   }
 }
