@@ -2,8 +2,9 @@ const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
 var store = [] // contains original objects created from promise
 var valueArray = [] // contains values from original objects
 var counter = 0
-
-
+const API_KEY2 = "6PeGFNKh7rV0HYYgZLg11SJidiuPfLz5"
+var key;
+var forecastsArray = []
 //Fetches the Location Key for Entered Location
 
 function getLocationKey() {
@@ -16,11 +17,30 @@ function getLocationKey() {
   $.get(searchUrl, function(data) {
     return data
   }).then(function(data){
-    debugger;
     key = data[0].Key
+    searchAddress = data[0].LocalizedName + " " + data[0].Country.LocalizedName
+    longitude = data[0].GeoPosition.Longitude
+    latitude = data[0].GeoPosition.Latitude
     return key
   }).then(function(key){
     getIndices(key)
+    getForecastSearchTerm(key)
+  }).fail((error) => {
+    console.log("There was an error with this request.")
+  })
+}
+
+//Fetching forcast search term on AccuWeather Forecast API
+function getForecastSearchTerm(key) {
+  let url = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${key}?apikey=`
+  let forecastSearch = url + API_KEY2
+  $.get(forecastSearch, function(data) {
+    return data
+  }).then(function(data){
+    debugger;
+   data.DailyForecasts.forEach(function(object){
+    forecastsArray.push(object.Day.IconPhrase)
+  })
   }).fail((error) => {
     console.log("There was an error with this request.")
   })
@@ -28,7 +48,7 @@ function getLocationKey() {
 
 //From Location Key, Grab the Index Values -- Call Instantiation
 
-function getIndices(key) {
+function getIndices(data) {
   let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
   let categoryId = "1"
   let baseUrlWithKey = url + key + "/"
