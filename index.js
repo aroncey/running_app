@@ -1,11 +1,16 @@
 const API_KEY = "Y6VozHmxn5OcKm1lkM47LtueW16Uw5GS"
 const FLICKR_API = "ea01f140f196b83ec68734970e235e36"
-const FLICKR_SECRET = " 40e4e1d0614430fb"
+const FLICKR_SECRET = "40e4e1d0614430fb"
 var store = [] // contains original objects created from promise
 var counter = 0
+const API_KEY2 = "6PeGFNKh7rV0HYYgZLg11SJidiuPfLz5"
+var key;
+var forecastsArray = []
 var longitude
 var latitude
 var searchAddress
+
+//Fetches the Location Key for Entered Location
 
 function getLocationKey() {
   $('#searchButton').hide()
@@ -28,6 +33,25 @@ function getLocationKey() {
     console.log("There was an error with this request.")
   })
 }
+
+//Fetching forcast search term on AccuWeather Forecast API
+function getForecastSearchTerm(key) {
+  let url = `http://dataservice.accuweather.com/forecasts/v1/daily/5day/${key}?apikey=`
+  let forecastSearch = url + API_KEY2
+  $.get(forecastSearch, function(data) {
+    return data
+  }).then(function(data){
+    debugger;
+   data.DailyForecasts.forEach(function(object){
+    forecastsArray.push(object.Day.IconPhrase)
+  })
+  }).catch((error) => {
+    console.log("There was an error with this request.")
+  })
+}
+
+
+//From Location Key, Grab the Index Values -- Call Instantiation
 
 function getIndices(key) {
   let url = "http://dataservice.accuweather.com/indices/v1/daily/5day/"
