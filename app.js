@@ -8,7 +8,6 @@ var counter = 0
 var forecastsArray = []
 
 $( () => {
-  //on page load -- this should not be running
   let $formTargeted = $("#searchButton")
   let sController = new SearchController($formTargeted)
 })
