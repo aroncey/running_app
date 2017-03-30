@@ -1,83 +1,79 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Running app</title>
+    <title>Run?</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href='assets/stylesheet.css' />
     <link rel="stylesheet" type="text/css" href='assets/test.css' />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="controllers/SearchController.js"></script>
     <script src="models/location.js"></script>
+    <script src="models/location_search.js"></script>
     <script src="models/forecast.js"></script>
-    <script src="controllers/ForecastControllers.js"></script>
+    <script src="store.js"></script>
+    <script src="controllers/ResultsControllers.js"></script>
     <script src="wrappers/Accuweather.js"></script>
+    <script src="views/forecastview.js"></script>
     <script src="app.js"></script>
   </head>
   <body>
-    <main id="main">
-      <!-- .search as target
-      this.attachListeners()
-      this.$target.find("#searchButton").on("click", function(e){
-      let location = new Location(this.$target.find("searchTerms").val())
-    })
-     -->
-      <div class="search">
-        <input type='text' placeholder="Please enter a city and state, or a city and country" class="searchBar" id="searchTerms" />
-        <button id="searchButton" class="searchButton">Find Out</button>
+      <div class="search center">
+        <form id="searchForm">
+            <input type='text' placeholder="Enter Your Location" class="searchBar" id="searchTerms" />
+            <button id="searchButton" class="searchButton">Find Out!</button>
+        </form>
       </div>
       <div id="errors"></div>
-    </main>
-    <div class="flexbox-container">
-        <button id="previousButton" onclick="decrementCounter()" class="initiallyHidden leftbtn"><i class="fa fa-chevron-left" aria-hidden="true"></i></span></button>
-        <div id="results"><h2 id="displayText"></h2>
+      <div id="results">
+        <button id="homeButton" class="initiallyHidden searchButton">Search Again</button>
+        <button id="previousButton" class="initiallyHidden leftbtn"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+        <button id="nextButton"  class="initiallyHidden rightbtn"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+        <h1>Run???</h1>
         <h3 id="displayAddress"></h3>
-        <div class="search">
-          <button id="homeButton" onclick="resetHome()" class="initiallyHidden searchButton">Reset</button>
-        </div>
-        <!-- Stick Man Run -->
-              <div>
-                        <section class="world">
-                          <div class="back one"></div>
-                          <div class="back two"></div>
-                          <div class="back three"></div>
-                          <div class="back four"></div>
-                          <div class="floor">
-                            <div class="rock one"></div>
-                            <div class="rock two"></div>
-                            <div class="rock three"></div>
-                            <div class="grass one"></div>
-                            <div class="grass two"></div>
-                            <div class="grass three"></div>
-                            <div class="grass four"></div>
-                            <div class="grass five"></div>
-                            <div class="grass six"></div>
-                            <div class="grass seven"></div>
-                            <div class="grass height"></div>
-                            <div class="grass nine"></div>
-                            <div class="grass ten"></div>
-                          </div>
-                          <div class="cloud one"></div>
-                          <div class="cloud two"></div>
-                          <div class="cloud three"></div>
-                          <div class="stick">
-                            <div class="head"></div>
-                            <div class="arm left">
-                              <div class="bottom"></div>
-                            </div>
-                            <div class="arm right">
-                              <div class="bottom"></div>
-                            </div>
-                            <div class="leg left">
-                              <div class="bottom"></div>
-                            </div>
-                            <div class="leg right">
-                              <div class="bottom"></div>
-                            </div>
-                          </div>
-                        </section>
-              </div>
-        </div>
-        <button id="nextButton" onclick="incrementCounter()" class="initiallyHidden rightbtn"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
+        <h2 id="displayText"></h2>
       </div>
+        <!-- Stick Man Run -->
+      <!-- <div> -->
+          <section class="world">
+            <div class="back one"></div>
+            <div class="back two"></div>
+            <div class="back three"></div>
+            <div class="back four"></div>
+            <div class="floor">
+            <div class="rock one"></div>
+            <div class="rock two"></div>
+            <div class="rock three"></div>
+            <div class="grass one"></div>
+            <div class="grass two"></div>
+            <div class="grass three"></div>
+            <div class="grass four"></div>
+            <div class="grass five"></div>
+            <div class="grass six"></div>
+            <div class="grass seven"></div>
+            <div class="grass height"></div>
+            <div class="grass nine"></div>
+            <div class="grass ten"></div>
+            </div>
+            <div class="cloud one"></div>
+            <div class="cloud two"></div>
+            <div class="cloud three"></div>
+            <div class="cloud four"></div>
+            <div class="stick">
+            <div class="head"></div>
+            <div class="arm left">
+            <div class="bottom"></div>
+            </div>
+            <div class="arm right">
+            <div class="bottom"></div>
+            </div>
+            <div class="leg left">
+            <div class="bottom"></div>
+            </div>
+            <div class="leg right">
+            <div class="bottom"></div>
+            </div>
+            </div>
+          </section>
+        <!-- </div> -->
   </body>
 </html>

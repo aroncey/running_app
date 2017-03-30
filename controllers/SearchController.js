@@ -1,13 +1,22 @@
 class SearchController {
-  constructor($target, $valueTarget) {
+  constructor($target, resultsController) {
     this.$target = $target
-    this.$valueTarget = $valueTarget
+    this.resultsController = resultsController
     this.attachListeners()
   }
 
    attachListeners() {
-    let $locationSearch = this.$valueTarget.val()
-    this.$target.on('click', Location.getForecastByName($locationSearch)
-  )
+    this.$target.find("#searchForm").on("submit", e => {
+      e.preventDefault()
+      let locationSearch = $(e.target).find("#searchTerms").val()
+      // Forecast.findByName(locationSearch)
+      LocationSearch.getForecastByName(locationSearch)
+      .then((data) => {
+        this.resultsController.showForecast(data)
+      })
+      .catch((error) => {
+          console.log("There was an error with second call")
+        })
+      })
   }
 }

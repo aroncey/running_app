@@ -3,13 +3,12 @@ class Store {
     this.state = {}
   }
 
-  add(resource, object) {
-    this.state[resource] ||= {}
-    this.state[resource][object.position] = object
+   add(object) {
+    this.state[object.index] = object
   }
 
-  find(resource, position) {
-    return this.state[resource][position]
+   find(resource, object) {
+    return this.state[object.index] = object
   }
 
 }
