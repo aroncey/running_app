@@ -1,13 +1,13 @@
 class SearchController {
-  constructor($target, $valueTarget) {
+  constructor($target) {
     this.$target = $target
-    this.$valueTarget = $valueTarget
     this.attachListeners()
   }
 
    attachListeners() {
-    let $locationSearch = this.$valueTarget.val()
-    this.$target.on('click', Location.getForecastByName($locationSearch)
-  )
-  }
+    this.$target.find("#searchButton").on("click", e => {
+      let $locationSearch = this.$target.find("#searchTerms").val()
+      let location = LocationSearch.getForecastByName($locationSearch)
+  })
+}
 }

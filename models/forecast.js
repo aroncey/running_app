@@ -1,38 +1,39 @@
 class Forecast {
 
-    constructor(activityId, categoryId, value, date, longitude, latitude, searchAddress){
+    constructor(index, activityId, categoryId, value, date){
+      this.index = index
       this.activityId = activityId
       this.categoryId = categoryId
       this.value = value
       this.date = date
-      store.push(this)
+      store.add(this)
     }
 
 
-  static forecastBuilder(obj){
+  static forecastBuilder(obj, index){
       let rawDate = obj.EpochDateTime
       let date = new Date(0)
       date.setUTCSeconds(rawDate)
-      new Forecast(obj.ID, obj.CategoryValue, obj.Value, date, longitude, latitude, searchAddress)
+      new Forecast(index, obj.ID, obj.CategoryValue, obj.Value, date)
   }
 
-  static sortStore(store) {
-    store.sort(function(a, b) {
-      return parseFloat(b.value) - parseFloat(a.value);
-    });
-    getDatesFromIndices(store)
-  }
-
-  static getDatesFromIndices(store) {
-    store.map(numberToDay)
-    describeDays(store)
-  }
-
-  static numberToDay(object) {
-    myDate = new Date ()
-    object.date = (new Date(myDate.setDate(myDate.getDate() + store.indexOf(object))))
-    formattedDate(object)
-  }
+  // // static sortStore(store) {
+  // //   store.sort(function(a, b) {
+  // //     return parseFloat(b.value) - parseFloat(a.value);
+  // //   });
+  // //   getDatesFromIndices(store)
+  // // }
+  //
+  // static getDatesFromIndices(store) {
+  //   store.map(numberToDay)
+  //   describeDays(store)
+  // // }
+  //
+  // static numberToDay(object) {
+  //   myDate = new Date ()
+  //   object.date = (new Date(myDate.setDate(myDate.getDate() + store.indexOf(object))))
+  //   formattedDate(object)
+  // }
 
   static formattedDate(object){
   if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
@@ -51,9 +52,9 @@ class Forecast {
       }
   }
 
-  static describeDays(store) {
+  static describeDays() {
     store.forEach(generateDescription)
-    showDays(store)
+    ForecastView.showDays()
   }
 
   static generateDescription(object){
