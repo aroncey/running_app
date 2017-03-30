@@ -7,7 +7,8 @@ var store = new Store
 var forecastsArray = []
 
 $( () => {
-
   let $target = $('.search')
-  let sController = new SearchController($target)
+  let $where = $('#results')
+  let rController = new ResultsController($where)
+  let sController = new SearchController($target, rController)
 })

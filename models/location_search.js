@@ -3,7 +3,7 @@ class LocationSearch {
   static getForecastByName(name){
     return this.findByName(name).
            then((key) => {
-             this.getForecastByKey(key)
+             return this.getForecastByKey(key)
            })
          }
 
@@ -16,12 +16,10 @@ class LocationSearch {
   }
 
   static getForecastByKey(key){
-    return Accuweather.getIndicies(key).
-    then((data) => {
-      ForecastController.createForecast(data)
-    }).
-    catch((error) => {
-        console.log("There was an error with second call")
-      })
-    }
+    return Accuweather.getIndicies(key)
+    .then((data) => {
+      return data.map(Forecast.forecastBuilder)
+      // return data.map(Forecast.newFromApi)
+    })
+  }
 }
