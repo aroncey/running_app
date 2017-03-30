@@ -47,6 +47,13 @@
   color: #D3D3D3;
 }
 
-#displayAddress {
-  
+#DisplayAddress {
+  position:fixed;
+  width: auto;
+  top: 200px;
+}
+
+.main {
+  height:100%;
+  width: 100%;
 }

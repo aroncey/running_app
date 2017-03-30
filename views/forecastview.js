@@ -2,9 +2,11 @@ class ForecastView {
 
   static renderWeek($target, data, index) {
     $target.find("#displayText").html(data.phrase)
-    // $("#displayAddress").html(dataItem.searchAddress)
+    debugger
+    $target.find("#displayAddress").html(searchAddress)
     $("#homeButton").show()
     $("#displayText").show()
+    $("#displayAddress").show()
     $("#searchButton").hide()
     $('#searchTerms').hide()
     $('#nextButton').hide()
