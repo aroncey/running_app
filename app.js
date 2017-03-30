@@ -8,6 +8,7 @@ var counter = 0
 var forecastsArray = []
 
 $( () => {
-  let $formTargeted = $("#searchButton")
-  let sController = new SearchController($formTargeted)
+  let $formButton = $('#searchButton')
+  let $formField = $("#searchTerms")
+  let sController = new SearchController($formButton, $formField)
 })

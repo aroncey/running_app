@@ -25,7 +25,6 @@ class Location {
 
 
   constructor(data) {
-    debugger
     this.localizedName = data.LocalizedName
     this.country = data.Country.LocalizedName
     this.latitude = data.GeoPosition.Latitude
