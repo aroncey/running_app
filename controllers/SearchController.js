@@ -15,7 +15,8 @@ class SearchController {
         this.resultsController.showForecast(data)
       })
       .catch((error) => {
-          console.log("There was an error with second call")
+        this.$target.find("#displayError").html("Please re-enter a valid location")
+        this.$target.find("#displayError").show()
         })
       })
   }
