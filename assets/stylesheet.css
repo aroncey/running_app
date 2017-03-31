@@ -7,6 +7,7 @@
   top: 40%;
   position: fixed;
   left: 25px;
+  z-index: 1;
 }
 
 .rightbtn {
@@ -16,6 +17,7 @@
   position: fixed;
   top: 40%;
   right: 25px;
+  z-index: 1;
 }
 
 .searchBar {
@@ -27,10 +29,12 @@
   border: none;
   text-align: center;
   font-size: 18px;
+  z-index: 1;
 }
 
 .search {
   margin-left: 36.5%;
+  z-index: 1;
 }
 
 .searchButton {
@@ -45,6 +49,7 @@
   text-align: center;
   background-color: black;
   color: #D3D3D3;
+  z-index: 1;
 }
 
 .main {

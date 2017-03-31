@@ -49,17 +49,20 @@ section.world {
   overflow: hidden;
   box-shadow: 0 16px 10px -10px #f0b400;
   transform: translate(-50%, -10%);
+  z-index: -1;
 }
 section.world div {
   position: absolute;
   box-sizing: border-box;
   background: #333333;
   border-radius: 2px;
+  z-index: -1;
 }
 section.world div::before, section.world div::after {
   content: "";
   position: absolute;
   box-sizing: border-box;
+  z-index: -1;
 }
 
 .back {
