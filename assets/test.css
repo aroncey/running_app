@@ -3,7 +3,7 @@ body {
   font-family: sans-serif;
   width: 100vw;
   height: 100vh;
-  perspective: 600px;
+  perspective: 50px;
   position:fixed;
 }
 
@@ -52,7 +52,7 @@ section.world {
   z-index: -1;
 }
 section.world div {
-  position: absolute;
+  position: fixed;
   box-sizing: border-box;
   background: #333333;
   border-radius: 2px;
