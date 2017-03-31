@@ -5,6 +5,7 @@ class ForecastView {
     // $target.find("#nextDay").html(data.nextDay)
     $target.find("#displayAddress").html(searchAddress)
     $("#homeButton").show()
+    $('#displayError').hide()
     $("#displayText").show()
     $("#displayAddress").show()
     $("#searchButton").hide()
