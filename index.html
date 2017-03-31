@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Run?</title>
+    <title>Vamos?</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href='assets/stylesheet.css' />
     <link rel="stylesheet" type="text/css" href='assets/test.css' />
@@ -17,18 +17,21 @@
     <script src="app.js"></script>
   </head>
   <body>
+
       <div class="search center">
         <form id="searchForm">
             <input type='text' placeholder="Enter Your Location" class="searchBar" id="searchTerms" />
             <button id="searchButton" class="searchButton">Find Out!</button>
         </form>
       </div>
+
       <div id="errors"></div>
       <div id="results">
-        <button id="homeButton" class="initiallyHidden searchButton">Search Again</button>
+        <button id="homeButton" class="initiallyHidden searchAgainButton">Search Again</button>
         <button id="previousButton" class="initiallyHidden leftbtn"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>
         <button id="nextButton"  class="initiallyHidden rightbtn"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>
-        <h1>Run???</h1>
+        <h3 id="nextDay" class="rightbtn"></h3>
+        <h1>¿Vamos?</h1>
         <h3 id="displayAddress"></h3>
         <h2 id="displayText"></h2>
       </div>

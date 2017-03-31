@@ -21,10 +21,7 @@ class Forecast {
   }
 
   static formattedDate(object){
-  if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
-    object.dayName = "today"
-  } else {
-    var weekday = new Array();
+  var weekday = new Array();
       weekday[0] = "Sunday";
       weekday[1] = "Monday";
       weekday[2] = "Tuesday";
@@ -33,9 +30,13 @@ class Forecast {
       weekday[5] = "Friday";
       weekday[6] = "Saturday";
       weekday[7] = "Today"
-      return object.dayName = weekday[object.date.getUTCDay()]
-      }
-  }
+if (object.date.getUTCDay() === (new Date ()).getUTCDay()) {
+  object.dayName = "today"
+} else {
+    object.dayName = weekday[object.date.getUTCDay()]
+    }
+    object.nextDay = weekday[object.date.getUTCDay() + 1]
+}
 
   static generateDescription(object){
     switch (true) {
