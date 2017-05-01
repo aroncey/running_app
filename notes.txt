@@ -1,9 +1,3 @@
-To do:
+See README file.
 
-* Input field: maybe make city, state, and country input field
-* Front End Design
-*clear arrays on next search
-
-*Index of
-
-* eventually make new api call to get weather data for each  day
+Best
